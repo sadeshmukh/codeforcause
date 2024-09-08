@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Chat with us">
+    <main class="container py-4">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <a href="/" class="btn btn-secondary">Home</a>
+            <h1 class="text-center text-light">Chat System</h1>
+        </header>
+        <div class="d-flex flex-column align-items-center">
+            <div class="w-100 d-flex flex-column">
+                <div id="chat-log" class="border p-3" style="height: 400px; overflow-y: auto;"></div>
+                <div class="d-flex mt-2">
+                    <input type="text" id="message" class="form-control mr-2" placeholder="Type a message...">
+                    <button id="send" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<!-- CSS Styles -->
+<style>
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    body {
+        background-color: #121212; /* Dark background */
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+        max-width: 600px; /* Set a max-width for better responsiveness */
+    }
+
+    h1 {
+        color: #e0e0e0; /* Light color for better contrast */
+    }
+
+    #chat-log {
+        background-color: #2e2e2e; /* Darker background for chat log */
+        color: #e0e0e0; /* Light text color for better contrast */
+        border-radius: 10px; /* Rounded corners for chat log */
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .message {
+        max-width: 80%;
+        padding: 10px;
+        border-radius: 15px;
+        position: relative;
+        word-break: break-word;
+        margin-bottom: 10px; /* Space between messages */
+    }
+
+    .message.sent {
+        background-color: #007bff; /* Blue background for sent messages */
+        color: white;
+        align-self: flex-end;
+        border-radius: 15px 15px 0 15px; /* Rounded corners for sent messages */
+    }
+
+    .message.received {
+        background-color: #6c757d; /* Grey background for received messages */
+        color: white;
+        align-self: flex-start;
+        border-radius: 15px 15px 15px 0; /* Rounded corners for received messages */
+    }
+
+    .message-bubble {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .message-text {
+        font-size: 16px;
+    }
+
+    .message-title {
+        color: #b0b0b0; /* Greyed out color */
+        margin-top: 5px; /* Space between text and title */
+        font-size: 10px;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-control {
+        border-radius: 20px; /* Rounded corners for input field */
+    }
+
+    .btn-primary {
+        border-radius: 20px; /* Rounded corners for button */
+    }
+
+    .btn-secondary {
+        border-radius: 20px; /* Rounded corners for button */
+        background-color: #6c757d; /* Secondary button color */
+        color: white;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .mt-2 {
+        margin-top: 0.5rem;
+    }
+
+    .mr-2 {
+        margin-right: 0.5rem;
+    }
+
+    header {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<script>
+
+// @ts-nocheck
+document.addEventListener('DOMContentLoaded', function() {
+    const messageInput = document.getElementById('message');
+    const sendButton = document.getElementById('send');
+    const chatLog = document.getElementById('chat-log');
+
+    // Predefined messages
+    const messages = [
+        { text: "Hello! How can I help you today?", type: "received", title: "Organizer" },
+        { text: "I have a question about your services.", type: "sent", title: "Attendee" },
+        { text: "Sure, feel free to ask any questions.", type: "received", title: "Organizer" }
+    ];
+
+    // Function to display a message
+    function displayMessage(message, type, title) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', type);
+
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.classList.add('message-bubble');
+        
+        const textDiv = document.createElement('div');
+        textDiv.classList.add('message-text');
+        textDiv.textContent = message;
+
+        const titleDiv = document.createElement('div');
+        titleDiv.classList.add('message-title');
+        titleDiv.textContent = title;
+
+        bubbleDiv.appendChild(textDiv);
+        bubbleDiv.appendChild(titleDiv);
+        messageDiv.appendChild(bubbleDiv);
+        chatLog.appendChild(messageDiv);
+
+        chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
+    }
+
+    // Initialize chat with predefined messages
+    messages.forEach(msg => displayMessage(msg.text, msg.type, msg.title));
+
+    // Event listener for the send button
+    sendButton.addEventListener('click', function() {
+        const userMessage = messageInput.value.trim();
+        if (userMessage) {
+            displayMessage(userMessage, 'sent', 'Attendee');
+            messageInput.value = ''; // Clear input field
+
+            // Mock a reply
+            setTimeout(() => {
+                const reply = "This is a mock reply to your message.";
+                displayMessage(reply, 'received', 'Organizer');
+            }, 1000);
+        }
+    });
+
+    // Optional: Allow pressing Enter to send a message
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+});
+</script>

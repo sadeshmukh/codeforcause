@@ -1,0 +1,42 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Create Event">
+  <main class="container py-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+      <a href="/" class="btn btn-secondary">Home</a>
+      <h1 class="text-center text-light">Create Event</h1>
+    </header>
+    <form class="p-3">
+      <div class="form-group">
+        <label for="title" class="text-light">Title</label>
+        <input type="text" id="title" class="form-control" placeholder="Enter event title..." />
+        </div>
+        <div class="form-group">
+          <label for="date" class="text-light">Date</label>
+          <input type="date" id="date" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="description" class="text-light">Description</label>
+          <textarea id="description" class="form-control" placeholder="Enter event description..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Event</button>
+        </form>
+    </main>
+</Layout>
+
+<script>
+    // @ts-nocheck
+    // say done on form submission
+    document.querySelector('form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Event created!');
+        // redirect to event calendar with new event in the form parameters
+        let url = '/event' + '?' + new URLSearchParams({
+            title: document.getElementById('title').value,
+            date: document.getElementById('date').value,
+            description: document.getElementById('description').value
+        });
+        window.location.href = url;
+    });
+</script>
